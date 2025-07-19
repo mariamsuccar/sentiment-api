@@ -1,18 +1,9 @@
-@app.route('/classify', methods=['POST'])
-def classify():
-    try:
-        data = request.get_json()
-        message = data.get('message')
-        print(f"Received message: {message}")  # Add this line
-        if not message:
-            return jsonify({"error": "No message provided"}), 400
-
 from flask import Flask, request, jsonify
 from openai import OpenAI
+import os
 
 # Initialize Flask and OpenAI client
 app = Flask(__name__)
-import os
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route('/classify', methods=['POST'])
@@ -21,6 +12,8 @@ def classify():
         # Get patient message from POST request
         data = request.get_json()
         message = data.get('message')
+        print(f"Received message: {message}")  # Log incoming message
+
         if not message:
             return jsonify({"error": "No message provided"}), 400
 
