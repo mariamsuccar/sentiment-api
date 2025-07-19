@@ -1,0 +1,47 @@
+from flask import Flask, request, jsonify
+from openai import OpenAI
+
+# Initialize Flask and OpenAI client
+app = Flask(__name__)
+import os
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+@app.route('/classify', methods=['POST'])
+def classify():
+    try:
+        # Get patient message from POST request
+        data = request.get_json()
+        message = data.get('message')
+        if not message:
+            return jsonify({"error": "No message provided"}), 400
+
+        # Define prompt
+        system_msg = "You are a clinical trial retention assistant."
+        user_msg = f"""
+The following is a text message sent by a patient participating in a clinical trial. 
+Classify the sentiment as one of: Positive (engaged), Neutral (at risk), or Negative (likely to drop out). 
+Then briefly explain why you classified it that way.
+
+Message: "{message}"
+"""
+
+        # Call GPT
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_msg},
+                {"role": "user", "content": user_msg}
+            ],
+            temperature=0
+        )
+
+        result = response.choices[0].message.content.strip()
+
+        # Return result as JSON
+        return jsonify({"result": result})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
