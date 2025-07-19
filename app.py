@@ -1,3 +1,12 @@
+@app.route('/classify', methods=['POST'])
+def classify():
+    try:
+        data = request.get_json()
+        message = data.get('message')
+        print(f"Received message: {message}")  # Add this line
+        if not message:
+            return jsonify({"error": "No message provided"}), 400
+
 from flask import Flask, request, jsonify
 from openai import OpenAI
 
