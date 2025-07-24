@@ -53,6 +53,8 @@ Message: "{message}"
         })
 
     except Exception as e:
+	import traceback
+	traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
