@@ -39,8 +39,18 @@ Message: "{message}"
 
         result = response.choices[0].message.content.strip()
 
-        # Return result as JSON
-        return jsonify({"result": result})
+        if "Explanation:" in result:
+            sentiment_part, reason_part = result.split("Explanation:", 1)
+            sentiment = sentiment_part.replace("Sentiment:", "").strip()
+            reason = reason_part.strip()
+        else:
+            sentiment = "Unknown"
+            reason = "Could not extract explanation."
+
+        return jsonify({
+            "sentiment": sentiment,
+            "reason": reason
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
