@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify
 from openai import OpenAI
 import os
+<<<<<<< HEAD
+=======
+import traceback
+>>>>>>> c19e914 (Fix traceback block)
 
 # Initialize Flask and OpenAI client
 app = Flask(__name__)
@@ -52,8 +56,11 @@ Message: "{message}"
             "reason": reason
         })
 
+<<<<<<< HEAD
 import traceback
 
+=======
+>>>>>>> c19e914 (Fix traceback block)
     except Exception as e:
 	traceback.print_exc()
 	print("❌ Error occurred:", str(e))
