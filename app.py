@@ -52,9 +52,11 @@ Message: "{message}"
             "reason": reason
         })
 
+import traceback
+
     except Exception as e:
-	import traceback
 	traceback.print_exc()
+	print("❌ Error occurred:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
